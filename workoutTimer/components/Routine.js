@@ -1,8 +1,17 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {List} from 'react-native-paper';
+import Workout from './Workout';
 
 const Routine = ({data}) => {
-  return <Text> {data.routine.name}</Text>;
+  return (
+    <List.Accordion
+      title="Uncontrolled Accordion"
+      left={props => <List.Icon {...props} icon="folder" />}>
+      {data.routine.workouts.map(workout => (
+        <Workout data={workout} />
+      ))}
+    </List.Accordion>
+  );
 };
 
 export default Routine;
