@@ -1,29 +1,20 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-import Routine from './components/Routine';
+import RoutinesScreen from './screens/RoutinesScreen';
+import RunningRoutineScreen from './screens/RunningRoutineScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+
+const Stack = createStackNavigator();
 
 const App = () => {
-  const routines = [
-    {
-      name: 'Upper Body',
-      workouts: [
-        {name: 'Push-ups', reps: 12, sets: 3},
-        {name: 'Military Press', reps: 10, sets: 3},
-        {name: 'Barbell Bent Over Row', reps: 10, sets: 3},
-        {name: 'Lying Dumbbell Triceps Extension', reps: 6, sets: 3},
-        {name: 'Dumbbell Curls', reps: 8, sets: 3},
-      ],
-    },
-  ];
-
-  return <Routine data={{routine: routines[0]}} />;
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Routines" component={RoutinesScreen} />
+        <Stack.Screen name="RunningRoutine" component={RunningRoutineScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 };
 
 export default App;
