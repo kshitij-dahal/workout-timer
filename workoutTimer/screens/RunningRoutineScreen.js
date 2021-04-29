@@ -1,8 +1,8 @@
 import React from 'react';
 import {Text} from 'react-native';
 
-const RunningRoutineScreen = ({data}) => {
-  return <Text> {data.routine.name}</Text>;
+const RunningRoutineScreen = ({route}) => {
+  return <Text> {route.params.name}</Text>;
 };
 
 export default RunningRoutineScreen;

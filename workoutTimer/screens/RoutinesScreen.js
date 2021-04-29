@@ -3,7 +3,7 @@ import Routine from '../components/Routine';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {Button, View} from 'react-native';
 
-const RoutinesScreen = () => {
+const RoutinesScreen = ({navigation}) => {
   const routines = [
     {
       name: 'Upper Body',
@@ -17,33 +17,60 @@ const RoutinesScreen = () => {
     },
   ];
 
-  const renderLeftActions = (progress, dragX) => {
-    const trans = dragX.interpolate({
-      inputRange: [0, 50, 100, 101],
-      outputRange: [-20, 0, 0, 1],
-    });
+  const getInitialExpandedRoutines = () => {
+    let initial = {};
+    routines.forEach(routine => (initial[routine.name] = 'false'));
+    return initial;
+  };
 
-    return (
-      <View>
-        <Button
-          title="Start"
-          onPress={() => console.log('ee')}
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexDirection: 'column',
-            paddingVertical: 100,
-          }}
-        />
-      </View>
-    );
+  const [expandedRoutines, setExpandedRoutines] = React.useState(
+    getInitialExpandedRoutines(),
+  );
+
+  const setExpandedRoutine = (routineName, value) => {
+    let copy = JSON.parse(JSON.stringify(expandedRoutines));
+    copy[routineName] = value;
+    setExpandedRoutines(copy);
+  };
+
+  React.useEffect(() => console.log(expandedRoutines), [expandedRoutines]);
+
+  const displayStartButton = routineName => {
+    console.log('haha');
+    console.log(routineName);
+    console.log(expandedRoutines);
+    if (!expandedRoutines[routineName]) {
+      return (
+        <View>
+          <Button
+            title="Start"
+            onPress={() => navigation.navigate('RunningRoutine', routines[0])}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexDirection: 'column',
+              paddingVertical: 100,
+            }}
+          />
+        </View>
+      );
+    } else {
+      return <View />;
+    }
   };
 
   return (
-    <Swipeable renderLeftActions={renderLeftActions}>
-      <Routine data={{routine: routines[0]}} />
-    </Swipeable>
+    <View>
+      {routines.map(routine => (
+        <Swipeable renderLeftActions={() => displayStartButton(routine.name)}>
+          <Routine
+            data={{routine: routine}}
+            setExpandedRoutine={setExpandedRoutine}
+          />
+        </Swipeable>
+      ))}
+    </View>
   );
 };
 
