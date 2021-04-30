@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Tts from 'react-native-tts';
-import {Stopwatch, Timer} from 'react-native-stopwatch-timer';
+import Timer from '../components/Timer';
 
 const RunningRoutineScreen = ({route}) => {
   const states = [
@@ -13,11 +13,14 @@ const RunningRoutineScreen = ({route}) => {
   ];
 
   const [routineState, setRoutineState] = React.useState('notRunning');
-  const [currentWorkoutIndex, setCurrentWorkoutIndex] = React.useState(0);
-  const [stopwatchStart, setStopwatchStart] = React.useState(false);
-  const [stopwatchReset, setStopwatchReset] = React.useState(false);
+
   const stateEq = str => {
     return str.localeCompare(routineState) === 0;
+  };
+
+  const nextSection = setTime => {
+    // set time for next seciont of workout
+    setTime({min: '00', sec: '50'});
   };
 
   if (stateEq('notRunning')) {
@@ -31,7 +34,6 @@ const RunningRoutineScreen = ({route}) => {
         <TouchableOpacity
           onPress={() => {
             setRoutineState('startSet');
-            setStopwatchStart(true);
           }}
           style={{
             borderWidth: 1,
@@ -58,7 +60,6 @@ const RunningRoutineScreen = ({route}) => {
         <TouchableOpacity
           onPress={() => {
             setRoutineState('startSet');
-            setStopwatchStart(!stopwatchStart);
           }}
           style={{
             borderWidth: 1,
@@ -70,13 +71,7 @@ const RunningRoutineScreen = ({route}) => {
             backgroundColor: '#fff',
             borderRadius: 100,
           }}>
-          <Stopwatch
-            laps
-            msecs
-            start={stopwatchStart}
-            reset={stopwatchReset}
-            getTime={() => {}}
-          />
+          <Timer start restart={nextSection} min="00" sec="35" />
         </TouchableOpacity>
       </View>
     );
