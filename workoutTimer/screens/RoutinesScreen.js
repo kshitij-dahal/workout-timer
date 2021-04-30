@@ -43,7 +43,7 @@ const RoutinesScreen = ({navigation}) => {
       return (
         <View>
           <Button
-            title="Start"
+            title="Go"
             onPress={() => navigation.navigate('RunningRoutine', routines[0])}
             style={{
               flex: 1,
