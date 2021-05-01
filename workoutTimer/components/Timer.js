@@ -1,15 +1,17 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-const Timer = ({restart, min, sec}) => {
-  const [time, setTime] = React.useState({min: min, sec: sec});
+const Timer = ({restart, initialTime}) => {
+  const [time, setTime] = React.useState(initialTime);
+
+  React.useEffect(() => setTime(initialTime), [initialTime]);
 
   const runTimer = () => {
-    console.log('here');
+    console.log('RUNTIMER IN TIMER');
     if (parseInt(time.sec) === 0) {
       if (parseInt(time.min) === 0) {
         clearInterval(runTimer);
-        setTimeout(() => restart(setTime), 1000);
+        setTimeout(restart, 1000);
       } else {
         setTime({
           min: (parseInt(time.min) <= 10 ? '0' : '') + (parseInt(time.min) - 1),
@@ -24,7 +26,7 @@ const Timer = ({restart, min, sec}) => {
     }
   };
 
-  React.useEffect(() => setTimeout(runTimer, 1000));
+  React.useEffect(() => setTimeout(runTimer, 1000), [time]);
 
   return (
     <View>
