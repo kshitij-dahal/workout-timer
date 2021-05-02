@@ -5,9 +5,11 @@ import {Button, View} from 'react-native';
 
 const RoutinesScreen = ({navigation}) => {
   const defaultTimes = {
-    setDuration: {min: '00', sec: '10'},
-    betweenSetDuration: {min: '00', sec: '30'},
-    betweenWorkoutsDuration: {min: '02', sec: '00'},
+    times: {
+      'Set Duration': {min: '00', sec: '10'},
+      'Rest Between Sets': {min: '00', sec: '30'},
+      'Rest Between Workouts': {min: '02', sec: '00'},
+    },
   };
 
   const routines = [

@@ -20,20 +20,21 @@ const RunningRoutineScreen = ({route}) => {
         case 'START_BREAK_BETWEEN_WORKOUTS':
           return {
             ...prevState,
-            time: workouts[prevState.workoutIndex].betweenSetDuration,
+            time:
+              workouts[prevState.workoutIndex].times['Rest Between Workouts'],
             routineState: 'betweenWorkouts',
           };
         case 'START_BREAK_BETWEEN_SETS':
           console.log('oompa');
           return {
             ...prevState,
-            time: workouts[prevState.workoutIndex].betweenSetDuration,
+            time: workouts[prevState.workoutIndex].times['Rest Between Sets'],
             routineState: 'betweenSets',
           };
         case 'START_NEW_WORKOUT':
           return {
             ...prevState,
-            time: workouts[prevState.workoutIndex].setDuration,
+            time: workouts[prevState.workoutIndex].times['Set Duration'],
             workoutIndex: prevState.workoutIndex + 1,
             currSet: 1,
             routineState: 'set',
@@ -41,14 +42,14 @@ const RunningRoutineScreen = ({route}) => {
         case 'START_NEW_SET':
           return {
             ...prevState,
-            time: workouts[prevState.workoutIndex].setDuration,
+            time: workouts[prevState.workoutIndex].times['Set Duration'],
             currSet: prevState.currSet + 1,
             routineState: 'set',
           };
         case 'START_ROUTINE':
           return {
             ...prevState,
-            time: workouts[0].setDuration,
+            time: workouts[0].times['Set Duration'],
             routineState: 'set',
             currSet: 1,
           };

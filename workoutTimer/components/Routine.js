@@ -17,13 +17,7 @@ const Routine = ({data, navigation, setExpandedRoutine}) => {
       <List.Accordion
         title={data.routine.name}
         expanded={expanded}
-        onPress={handlePress}
-        right={() => (
-          <Button
-            title="Start"
-            onPress={() => navigation.navigate('RunningRoutine', data)}
-          />
-        )}>
+        onPress={handlePress}>
         {data.routine.workouts.map(workout => (
           <Workout data={workout} />
         ))}
