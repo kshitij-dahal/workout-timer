@@ -10,6 +10,13 @@ const RunningRoutineScreen = ({route}) => {
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
+        case 'FINISH_ROUTINE':
+          return {
+            ...prevState,
+            time: {min: '00', sec: '00'},
+            routineState: 'notRunning',
+            currSet: 1,
+          };
         case 'START_BREAK_BETWEEN_WORKOUTS':
           return {
             ...prevState,
@@ -43,6 +50,7 @@ const RunningRoutineScreen = ({route}) => {
             ...prevState,
             time: workouts[0].setDuration,
             routineState: 'set',
+            currSet: 1,
           };
       }
     },
@@ -69,8 +77,11 @@ const RunningRoutineScreen = ({route}) => {
         console.log('here AAA');
         dispatch({type: 'START_BREAK_BETWEEN_SETS'});
       } else {
-        console.log('here BBBBB');
-        dispatch({type: 'START_BREAK_BETWEEN_WORKOUTS'});
+        if (state.workoutIndex < workouts.length - 1) {
+          dispatch({type: 'START_BREAK_BETWEEN_WORKOUTS'});
+        } else {
+          dispatch({type: 'FINISH_ROUTINE'});
+        }
       }
     } else if (stateEq('betweenSets')) {
       dispatch({type: 'START_NEW_SET'});
@@ -82,9 +93,29 @@ const RunningRoutineScreen = ({route}) => {
   };
 
   const voiceRoutineState = () => {
-    Tts.speak(getCurrWorkout().name);
-    Tts.speak(getCurrWorkout().reps + ' reps');
+    const workoutName = workouts[state.workoutIndex].name;
+    if (stateEq('set')) {
+      Tts.speak(
+        workoutName +
+          ', ' +
+          'Set ' +
+          state.currSet +
+          ' and ' +
+          workouts[state.workoutIndex].reps +
+          ' reps ' +
+          ' start',
+      );
+    } else if (stateEq('betweenSets')) {
+      Tts.speak(workoutName + ' Break - Set ' + (state.currSet + 1) + ' Next');
+    } else if (stateEq('betweenWorkouts')) {
+      Tts.speak(
+        'Break - Next Workout ' + workouts[state.workoutIndex + 1].name,
+      );
+    }
+    return '';
   };
+
+  React.useEffect(voiceRoutineState, [state.routineState]);
 
   const displayRoutineState = () => {
     console.log('here we go' + state.routineState);
@@ -109,8 +140,7 @@ const RunningRoutineScreen = ({route}) => {
         }}>
         <TouchableOpacity
           onPress={() => {
-            voiceRoutineState();
-            setTimeout(nextSection, 3000);
+            nextSection();
           }}
           style={{
             borderWidth: 1,

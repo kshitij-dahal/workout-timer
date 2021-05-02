@@ -11,7 +11,7 @@ const Timer = ({restart, initialTime}) => {
     if (parseInt(time.sec) === 0) {
       if (parseInt(time.min) === 0) {
         clearInterval(runTimer);
-        setTimeout(restart, 1000);
+        restart();
       } else {
         setTime({
           min: (parseInt(time.min) <= 10 ? '0' : '') + (parseInt(time.min) - 1),

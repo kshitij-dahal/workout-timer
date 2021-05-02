@@ -6,7 +6,7 @@ import {Button, View} from 'react-native';
 const RoutinesScreen = ({navigation}) => {
   const defaultTimes = {
     setDuration: {min: '00', sec: '10'},
-    betweenSetDuration: {min: '00', sec: '45'},
+    betweenSetDuration: {min: '00', sec: '30'},
     betweenWorkoutsDuration: {min: '02', sec: '00'},
   };
 
@@ -14,16 +14,16 @@ const RoutinesScreen = ({navigation}) => {
     {
       name: 'Upper Body',
       workouts: [
-        {...defaultTimes, name: 'Push-ups', reps: 12, sets: 3},
-        {...defaultTimes, name: 'Military Press', reps: 10, sets: 3},
-        {...defaultTimes, name: 'Barbell Bent Over Row', reps: 10, sets: 3},
+        //{...defaultTimes, name: 'Push-ups', reps: 12, sets: 3},
+        //{...defaultTimes, name: 'Military Press', reps: 10, sets: 3},
+        //{...defaultTimes, name: 'Barbell Bent Over Row', reps: 10, sets: 3},
         {
           ...defaultTimes,
           name: 'Lying Dumbbell Triceps Extension',
           reps: 6,
-          sets: 3,
+          sets: 2,
         },
-        {...defaultTimes, name: 'Dumbbell Curls', reps: 8, sets: 3},
+        //{...defaultTimes, name: 'Dumbbell Curls', reps: 8, sets: 3},
       ],
     },
   ];
