@@ -1,0 +1,9 @@
+- fix icons to the left and right of accordions <--- xxxxx
+- fix visibility of text inputs (style it?) it is not showing on android
+- allow user to add workouts and add routines
+- allow pausing in middle <--- xxxx
+- have voice saying finish <---- xxxxx
+- fix the go button so it goes to right workout
+- storelocally the workout info <---- xxxxx
+- change what its saying
+- change the go button to look better on routines screen

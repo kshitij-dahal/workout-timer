@@ -1,7 +1,6 @@
 import React from 'react';
 import {List} from 'react-native-paper';
 import {TextInput, Text, View, StyleSheet} from 'react-native';
-
 const styles = StyleSheet.create({
   nonTimeInfoText: {
     flex: 2,
@@ -23,13 +22,14 @@ const Workout = ({data}) => {
   return (
     <List.Accordion
       title={workoutInfo.name}
-      style={{width: '95%', left: '5%'}}
-      left={props => <List.Icon {...props} icon="folder" />}>
+      style={{width: '95%', marginLeft: '5%'}}
+      right={() => <View />}>
       {Object.keys(workoutInfo).map(key => {
         if (key.localeCompare('times') !== 0) {
           return (
             <View
               style={{
+                marginLeft: '15%',
                 flexDirection: 'row',
               }}>
               <View style={styles.nonTimeInfoText}>
@@ -54,6 +54,7 @@ const Workout = ({data}) => {
         return (
           <View
             style={{
+              marginLeft: '15%',
               flexDirection: 'row',
             }}>
             <View style={styles.timeInfoText}>

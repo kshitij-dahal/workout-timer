@@ -14,7 +14,7 @@ const RunningRoutineScreen = ({route}) => {
           return {
             ...prevState,
             time: {min: '00', sec: '00'},
-            routineState: 'notRunning',
+            routineState: 'finished',
             currSet: 1,
           };
         case 'START_BREAK_BETWEEN_WORKOUTS':
@@ -53,6 +53,11 @@ const RunningRoutineScreen = ({route}) => {
             routineState: 'set',
             currSet: 1,
           };
+        case 'SWITCH_TIMER_STATE':
+          return {
+            ...prevState,
+            timerRunning: !prevState.timerRunning,
+          };
       }
     },
     {
@@ -61,6 +66,7 @@ const RunningRoutineScreen = ({route}) => {
       currSet: 1,
       time: {min: '00', sec: '00'},
       setTimerTime: null,
+      timerRunning: true,
     },
   );
 
@@ -112,8 +118,9 @@ const RunningRoutineScreen = ({route}) => {
       Tts.speak(
         'Break - Next Workout ' + workouts[state.workoutIndex + 1].name,
       );
+    } else if (stateEq('finished')) {
+      Tts.speak('Done Homie!');
     }
-    return '';
   };
 
   React.useEffect(voiceRoutineState, [state.routineState]);
@@ -157,6 +164,23 @@ const RunningRoutineScreen = ({route}) => {
         </TouchableOpacity>
       </View>
     );
+  } else if (stateEq('finished')) {
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+        }}>
+        <Text
+          style={{
+            fontFamily: 'Cochin',
+            fontSize: 20,
+          }}>
+          Done!
+        </Text>
+      </View>
+    );
   } else {
     return (
       <View
@@ -176,7 +200,9 @@ const RunningRoutineScreen = ({route}) => {
           {displayRoutineState()}
         </Text>
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={() => {
+            dispatch({type: 'SWITCH_TIMER_STATE'});
+          }}
           style={{
             borderWidth: 1,
             borderColor: 'rgba(0,0,0,0.2)',
@@ -187,7 +213,12 @@ const RunningRoutineScreen = ({route}) => {
             backgroundColor: '#fff',
             borderRadius: 100,
           }}>
-          <Timer start initialTime={state.time} restart={nextSection} />
+          <Timer
+            start
+            initialTime={state.time}
+            restart={nextSection}
+            isOn={state.timerRunning}
+          />
         </TouchableOpacity>
       </View>
     );

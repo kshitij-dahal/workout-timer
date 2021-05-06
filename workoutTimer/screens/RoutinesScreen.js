@@ -1,7 +1,15 @@
 import React from 'react';
 import Routine from '../components/Routine';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {Button, View} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  Button,
+} from 'react-native';
 
 const RoutinesScreen = ({navigation}) => {
   const defaultTimes = {
@@ -12,7 +20,7 @@ const RoutinesScreen = ({navigation}) => {
     },
   };
 
-  const routines = [
+  const defaultRoutines = [
     {
       name: 'Upper Body',
       workouts: [
@@ -28,17 +36,54 @@ const RoutinesScreen = ({navigation}) => {
         //{...defaultTimes, name: 'Dumbbell Curls', reps: 8, sets: 3},
       ],
     },
+    {
+      name: 'Abs',
+      workouts: [
+        {...defaultTimes, name: 'Plank', reps: 1, sets: 3},
+        {...defaultTimes, name: 'Side Plank', reps: 1, sets: 3},
+        {...defaultTimes, name: 'Reverse Crunch', reps: 1, sets: 3},
+        {...defaultTimes, name: 'Bicycle Crunch', reps: 1, sets: 3},
+      ],
+    },
   ];
 
   const getInitialExpandedRoutines = () => {
     let initial = {};
-    routines.forEach(routine => (initial[routine.name] = 'false'));
+    defaultRoutines.forEach(routine => (initial[routine.name] = 'false'));
     return initial;
   };
 
   const [expandedRoutines, setExpandedRoutines] = React.useState(
     getInitialExpandedRoutines(),
   );
+  const [routineFetched, setRoutineFetched] = React.useState(false);
+  const [routines, setRoutines] = React.useState(defaultRoutines);
+
+  const fetchRoutines = async () => {
+    if (!routineFetched) {
+      setRoutineFetched(true);
+      try {
+        const fetched = await AsyncStorage.getItem('routines');
+        console.log('HERE WE ARE');
+        console.log(fetched);
+        console.log('NO MORE');
+        if (fetched !== null) {
+          setRoutines(JSON.parse(fetched));
+        }
+      } catch (e) {
+        alert('Failed to fetch the data from storage');
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    fetchRoutines();
+  }, []);
+
+  React.useEffect(() => {
+    console.log('what is happen');
+    console.log(routines);
+  }, [routines]);
 
   const setExpandedRoutine = (routineName, value) => {
     let copy = JSON.parse(JSON.stringify(expandedRoutines));
@@ -49,23 +94,28 @@ const RoutinesScreen = ({navigation}) => {
   React.useEffect(() => console.log(expandedRoutines), [expandedRoutines]);
 
   const displayStartButton = routineName => {
-    console.log('haha');
-    console.log(routineName);
-    console.log(expandedRoutines);
     if (!expandedRoutines[routineName]) {
       return (
-        <View>
-          <Button
+        <View style={{justifyContent: 'center'}}>
+          <TouchableOpacity
             title="Go"
             onPress={() => navigation.navigate('RunningRoutine', routines[0])}
             style={{
               flex: 1,
               alignItems: 'center',
-              justifyContent: 'space-between',
-              flexDirection: 'column',
-              paddingVertical: 100,
-            }}
-          />
+              justifyContent: 'center',
+              backgroundColor: 'deepskyblue',
+              padding: 10,
+            }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                color: 'white',
+              }}>
+              Go
+            </Text>
+          </TouchableOpacity>
         </View>
       );
     } else {
@@ -74,16 +124,35 @@ const RoutinesScreen = ({navigation}) => {
   };
 
   return (
-    <View>
-      {routines.map(routine => (
-        <Swipeable renderLeftActions={() => displayStartButton(routine.name)}>
-          <Routine
-            data={{routine: routine}}
-            setExpandedRoutine={setExpandedRoutine}
-          />
-        </Swipeable>
-      ))}
-    </View>
+    <SafeAreaView style={{flex: 1}}>
+      <ScrollView style={{flex: 1}}>
+        {routines.map(routine => (
+          <Swipeable renderLeftActions={() => displayStartButton(routine.name)}>
+            <Routine
+              data={{routine: routine}}
+              setExpandedRoutine={setExpandedRoutine}
+              setRoutines={setRoutines}
+            />
+          </Swipeable>
+        ))}
+      </ScrollView>
+      <View>
+        <Button
+          title="Add"
+          style={{flex: 1}}
+          onPress={() =>
+            AsyncStorage.setItem('routines', JSON.stringify(routines))
+          }
+        />
+        <Button
+          style={{flex: 1}}
+          title="Update"
+          onPress={() =>
+            AsyncStorage.setItem('routines', JSON.stringify(routines))
+          }
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 

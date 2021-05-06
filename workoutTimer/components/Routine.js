@@ -1,14 +1,18 @@
 import React from 'react';
 import {List} from 'react-native-paper';
-import {Button, View} from 'react-native';
+import {View, Text} from 'react-native';
 import Workout from './Workout';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-const Routine = ({data, navigation, setExpandedRoutine}) => {
+const Routine = ({data, navigation, setExpandedRoutine, setRoutines}) => {
   const [expanded, setExpanded] = React.useState(false);
+  const [workouts, setWorkouts] = React.useState(data.routine.workouts);
 
   React.useEffect(() => setExpandedRoutine(data.routine.name, expanded), [
     expanded,
   ]);
+
+  React.useEffect(() => {}, [workouts]);
 
   const handlePress = () => setExpanded(!expanded);
 
@@ -17,7 +21,8 @@ const Routine = ({data, navigation, setExpandedRoutine}) => {
       <List.Accordion
         title={data.routine.name}
         expanded={expanded}
-        onPress={handlePress}>
+        onPress={handlePress}
+        right={() => <View />}>
         {data.routine.workouts.map(workout => (
           <Workout data={workout} />
         ))}
