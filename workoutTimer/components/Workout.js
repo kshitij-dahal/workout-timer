@@ -19,6 +19,10 @@ const styles = StyleSheet.create({
 const Workout = ({data}) => {
   const [workoutInfo, setWorkoutInfo] = React.useState(data);
 
+  React.useEffect(() => {
+    setWorkoutInfo(data);
+  }, [data]);
+
   return (
     <List.Accordion
       title={workoutInfo.name}
